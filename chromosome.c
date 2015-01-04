@@ -37,12 +37,12 @@ struct Chromosome** crossover(struct Chromosome *parent_1, struct Chromosome *pa
     point_2 = aux;
   }
 
-  memcpy(children[0]->features, parent_1->features, point_1 * sizeof(Gene));
-  memcpy(children[1]->features, parent_2->features, point_1 * sizeof(Gene));
-  memcpy(children[0]->features + point_1, parent_2->features + point_1, (point_2 - point_1) * sizeof(Gene));
-  memcpy(children[1]->features + point_1, parent_1->features + point_1, (point_2 - point_1) * sizeof(Gene));
-  memcpy(children[0]->features + point_2, parent_1->features + point_2, (NUM_FEATURES - point_2) * sizeof(Gene));
-  memcpy(children[1]->features + point_2, parent_2->features + point_2, (NUM_FEATURES - point_2) * sizeof(Gene));
+  memcpy(children[0]->features, parent_1->features, point_1 * sizeof(struct Gene));
+  memcpy(children[1]->features, parent_2->features, point_1 * sizeof(struct Gene));
+  memcpy(children[0]->features + point_1, parent_2->features + point_1, (point_2 - point_1) * sizeof(struct Gene));
+  memcpy(children[1]->features + point_1, parent_1->features + point_1, (point_2 - point_1) * sizeof(struct Gene));
+  memcpy(children[0]->features + point_2, parent_1->features + point_2, (NUM_FEATURES - point_2) * sizeof(struct Gene));
+  memcpy(children[1]->features + point_2, parent_2->features + point_2, (NUM_FEATURES - point_2) * sizeof(struct Gene));
 
   return children;
 }
@@ -66,7 +66,15 @@ float fitness(Chromosome *chromosome, Chromosome **population) {
 */
 
 float fitness(struct Chromosome *chromosome) {
+  int i;
 
+  for (i = 0; i < NUM_FEATURES; ++i) {
+    if(isCarcinogen(chromosome->features[i]) == true) {
+      chromosome->fitness++;
+    }
+  }
+
+  return chromosome->fitness;
 }
 
 void freeChromosome(struct Chromosome *chromosome)
