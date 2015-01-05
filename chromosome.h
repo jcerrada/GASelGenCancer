@@ -1,6 +1,6 @@
 
-#ifndef CHROMOSOME
-#define CHROMOSOME
+#ifndef CHROMOSOME_H
+#define CHROMOSOME_H
 
 #include "Gene.h"
 
@@ -14,10 +14,10 @@ typedef struct Chromosome {
 } Chromosome;
 
 struct Chromosome*  createChromosome(int *features);
-struct Chromosome** crossover(struct Chromosome *parent_1, struct Chromosome *parent_2);
-void         mutate(struct Chromosome *chromosome);
-//float        fitness(Chromosome *chromosome, Chromosome **population);
-float        fitness(struct Chromosome *chromosome);
-void         freeChromosome(struct Chromosome *chromosome);
+void                crossover(struct Chromosome *parent_1, struct Chromosome *parent_2, struct Chromosome **children);
+void                mutate(struct Chromosome *chromosome);
+//float              fitness(Chromosome *chromosome, Chromosome **population);
+float               fitness(struct Chromosome *chromosome);
+void                freeChromosome(struct Chromosome *chromosome);
 
 #endif

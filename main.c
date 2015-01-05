@@ -1,10 +1,22 @@
+/*
+ ============================================================================
+ Name        : GASelGenCancer.c
+ Author      : 
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
 #include "chromosome.h"
 
-int main() {
+int main(void) {
   int array[] = {1,2,3,4,5,6,7,8,9,0};
   struct Gene gene;
   struct Chromosome *chromosome = createChromosome(array);
+  srand(time(NULL));
   initializeGene(&gene, 5);
   printf("Hello world!\n");
-  return 0;
+  freeChromosome(chromosome);
+  return EXIT_SUCCESS;
 }
