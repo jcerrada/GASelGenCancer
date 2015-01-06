@@ -2,9 +2,9 @@
 #ifndef GENE_H
 #define GENE_H
 
-#include "commons.h"
+#include "Commons.h"
 
-#define NUM_CARCINOGEN     20
+#define NUM_CARCINOGEN 20
 extern const int CARCINOGEN_GENES[];
 
 typedef struct Gene {
@@ -12,8 +12,8 @@ typedef struct Gene {
   bool   carcinogen;
 } Gene;
 
-void  initializeGene(struct Gene *gene, int feature);
-void  setCarcinogen(struct Gene *gene);
-bool  isCarcinogen(struct Gene *gene);
+void initializeGene(struct Gene *gene, int feature);
+void setCarcinogen(struct Gene *gene);
+bool isCarcinogen(struct Gene *gene);
 
 #endif

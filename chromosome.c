@@ -14,6 +14,9 @@ struct Chromosome* createChromosome(int *features)
   return chromosome;
 }
 
+/**
+* Two-point crossovers
+*/
 void crossover(struct Chromosome *parent_1, struct Chromosome *parent_2, struct Chromosome **children)
 {
   int i, num_children, point_1, point_2, aux;
@@ -60,15 +63,26 @@ float fitness(Chromosome *chromosome, Chromosome **population) {
 }
 */
 
-float fitness(struct Chromosome *chromosome) {
-  int i;
+/**
+* f(x) = A(x)*w1 + w2*(M - R(x))/M --> A(x) ->suma de elementos cancerígenos, M--> total genes, R(X)--> genes seleccionados
+*/
+float calculateFitness(struct Chromosome *chromosome) {
+  int i, A, R, M;
 
+  A = 0;
   for (i = 0; i < NUM_FEATURES; ++i) {
     if(isCarcinogen(&chromosome->features[i]) == true) {
-      chromosome->fitness++;
+      A++;
     }
   }
+  M = MAX_GEN;
+  R = NUM_FEATURES - A; //Number of selected features - Carcinogen genes selected
+  chromosome->fitness = (A * WEIGHT_1) + (WEIGHT_2 * (M - R))/M;
 
+  return chromosome->fitness;
+}
+
+float getFitness(struct Chromosome *chromosome) {
   return chromosome->fitness;
 }
 
