@@ -1,14 +1,16 @@
-#include "chromosome.h"
+#include "Chromosome.h"
 
-struct Chromosome* createChromosome(int *features)
+struct Chromosome* createChromosome(int *features, int num_features)
 {
   int i;
   struct Chromosome *chromosome;
 
   chromosome = (Chromosome *)my_malloc(sizeof(Chromosome));
-  chromosome->fitness  = 0;
+  chromosome->features    = (Chromosome **)my_malloc(num_features * sizeof(Chromosome *));
+  chromosome->numFeatures = num_features;
+  chromosome->fitness     = 0;
   for(i = 0; i < NUM_FEATURES && features != NULL; i++) {
-    initializeGene(&chromosome->features[i], features[i]);
+    chromosome->features[i] = createGene(features[i]);
   }
 
   return chromosome;
@@ -49,12 +51,11 @@ void mutate(struct Chromosome *chromosome)
 {
   int gene, position;
 
-  srand(NULL);
-  if((rand() % 100) < MUTATION_PROB) {
-    gene     = rand() % MAX_GEN;
-    position = rand() % NUM_FEATURES;
-    initializeGene(&chromosome->features[position], gene);
-  }
+  gene     = rand() % MAX_GEN;
+  position = rand() % NUM_FEATURES;
+
+  freeGene(chromosome->features[position]);
+  chromosome->features[position] = createGene(gene);
 }
 
 /*
@@ -71,7 +72,7 @@ float calculateFitness(struct Chromosome *chromosome) {
 
   A = 0;
   for (i = 0; i < NUM_FEATURES; ++i) {
-    if(isCarcinogen(&chromosome->features[i]) == true) {
+    if(isCarcinogen(chromosome->features[i]) == true) {
       A++;
     }
   }
@@ -88,5 +89,11 @@ float getFitness(struct Chromosome *chromosome) {
 
 void freeChromosome(struct Chromosome *chromosome)
 {
+  int i;
+
+  for(i = 0; i < chromosome->numFeatures; i++) {
+	freeGene(chromosome->features[i]);
+  }
+  free(chromosome->features);
   free(chromosome);
 }

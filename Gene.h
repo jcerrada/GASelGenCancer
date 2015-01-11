@@ -4,16 +4,18 @@
 
 #include "Commons.h"
 
-#define NUM_CARCINOGEN 20
-extern const int CARCINOGEN_GENES[];
+int NUM_CARCINOGEN;
+int CARCINOGEN_GENES[];
 
 typedef struct Gene {
   int    feature; //array containing the features of the chromosome
   bool   carcinogen;
 } Gene;
 
-void initializeGene(struct Gene *gene, int feature);
-void setCarcinogen(struct Gene *gene);
-bool isCarcinogen(struct Gene *gene);
+struct Gene* createGene(int feature);
+int          getFeature(struct Gene *gene);
+bool         isCarcinogen(struct Gene *gene);
+void         setCarcinogen(struct Gene *gene)
+void         freeGene(struct Gene *gene);
 
 #endif

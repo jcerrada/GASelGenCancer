@@ -4,10 +4,12 @@
 
 #include "Chromosome.h"
 
-#define POPULATION_SIZE 10
-#define MAX_GENERATIONS 100
 #define BEST_POSIBLE_FITNESS NUM_FEATURES    
 #define CONFIG_FILE "gaselcancer.cfg"
+
+int POPULATION_SIZE;
+int MUTATION_PROB;
+int MAX_GENERATIONS;
 
 typedef struct GAHandler {
   struct Chromosome *population[POPULATION_SIZE];

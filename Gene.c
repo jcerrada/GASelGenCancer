@@ -2,10 +2,24 @@
 
 const int CARCINOGEN_GENES[] = {3, 4 , 7, 9, 12, 15, 19, 22, 28, 36, 41, 49, 53, 57, 64, 65, 70, 73, 81, 97};
 
-void initializeGene(struct Gene *gene, int feature)
+struct Gene* createGene(int feature)
 {
-  gene->feature = feature;
-  setCarcinogen(gene);
+	struct Gene *gene = my_malloc(sizeof(struct Gene));
+
+	gene->feature = feature;
+	setCarcinogen(gene);
+
+	return gene;
+}
+
+int getFeature(struct Gene *gene)
+{
+	return gene->feature;
+}
+
+bool isCarcinogen(struct Gene *gene)
+{
+  return gene->carcinogen;
 }
 
 void setCarcinogen(struct Gene *gene)
@@ -21,7 +35,7 @@ void setCarcinogen(struct Gene *gene)
   }
 }
 
-bool isCarcinogen(struct Gene *gene)
+void freeGene(struct Gene *gene)
 {
-  return gene->carcinogen;
+	free(gene);
 }

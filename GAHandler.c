@@ -1,8 +1,16 @@
 
 #include "GAHandler.h"
 
+extern int   MAX_GEN            = 100;
+extern int   NUM_FEATURES       = 10;
+extern float WEIGHT_1           = 0.65;
+extern float WEIGHT_2           = 0.35;
+extern int   NUM_CARCINOGEN     = 20;
+extern int   CARCINOGEN_GENES[] = {3, 4, 7, 9, 12, 15, 19, 22, 28, 36, 41, 49, 53, 57, 64, 65, 70, 73, 81, 97};
+
 struct GAHandler* createGAHandler(char *config_file)
 {
+	struct GAHandler *gaHandler = my_malloc(sizeof(GAHandler));
 
 }
 
