@@ -20,7 +20,7 @@ void                crossover(struct Chromosome *parent_1, struct Chromosome *pa
 void                mutate(struct Chromosome *chromosome);
 //float              fitness(Chromosome *chromosome, Chromosome **population);
 float               calculateFitness(struct Chromosome *chromosome);
-float               getFitness(struct Chromosome *chromosome)
+float               getFitness(struct Chromosome *chromosome;
 void                freeChromosome(struct Chromosome *chromosome);
 
 #endif

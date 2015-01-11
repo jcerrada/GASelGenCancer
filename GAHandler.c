@@ -20,7 +20,7 @@ struct Chromosome* getBestChromosome(struct GAHandler *gaHandler)
 {
   int i;
   struct Chromosome *chromosome;
-  float             fitness, bestFitness = 0;
+  float             fitness, bestFitness = -1;
 
   for (i = 0; i < POPULATION_SIZE && bestFitness < BEST_POSIBLE_FITNESS; ++i) {
     fitness = getFitness(gaHandler->population[i]);
