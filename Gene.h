@@ -15,7 +15,7 @@ typedef struct Gene {
 struct Gene* createGene(int feature);
 int          getFeature(struct Gene *gene);
 bool         isCarcinogen(struct Gene *gene);
-void         setCarcinogen(struct Gene *gene)
+void         setCarcinogen(struct Gene *gene);
 void         freeGene(struct Gene *gene);
 
 #endif

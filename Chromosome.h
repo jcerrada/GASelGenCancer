@@ -14,12 +14,11 @@ typedef struct Chromosome {
   float   fitness;
 } Chromosome;
 
-struct Chromosome*  createChromosome(int *features, int num_features);
-void                crossover(struct Chromosome *parent_1, struct Chromosome *parent_2, struct Chromosome **children);
-void                mutate(struct Chromosome *chromosome);
-//float              fitness(Chromosome *chromosome, Chromosome **population);
-float               calculateFitness(struct Chromosome *chromosome);
-float               getFitness(struct Chromosome *chromosome;
-void                freeChromosome(struct Chromosome *chromosome);
+struct Chromosome* createChromosome(int *features, int num_features);
+void               crossover(struct Chromosome *parent_1, struct Chromosome *parent_2, struct Chromosome **children);
+void               mutate(struct Chromosome *chromosome);
+float              calculateFitness(struct Chromosome *chromosome);
+float              getFitness(struct Chromosome *chromosome;
+void               freeChromosome(struct Chromosome *chromosome);
 
 #endif

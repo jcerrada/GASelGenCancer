@@ -12,7 +12,7 @@ int MUTATION_PROB;
 int MAX_GENERATIONS;
 
 typedef struct GAHandler {
-  struct Chromosome *population[POPULATION_SIZE];
+  struct Chromosome **population;
 } GAHandler;
 
 struct GAHandler*   createGAHandler(char *config_file);

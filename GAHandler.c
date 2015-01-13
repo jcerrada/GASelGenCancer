@@ -16,7 +16,15 @@ struct GAHandler* createGAHandler(char *config_file)
 
 void initAlgorithm(struct GAHandler *gaHandler)
 {
+  int i;
 
+  do {
+    for (i = 0; i < POPULATION_SIZE; ++i)
+    {
+      calculateFitness(gaHandler->population[i]);
+      
+    }
+  } while(true);
 }
 
 struct Chromosome** getPopulation(struct GAHandler *gaHandler)
