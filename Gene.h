@@ -5,7 +5,7 @@
 #include "Commons.h"
 
 int NUM_CARCINOGEN;
-int CARCINOGEN_GENES[];
+int *CARCINOGEN_GENES;
 
 typedef struct Gene {
   int    feature; //array containing the features of the chromosome

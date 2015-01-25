@@ -1,3 +1,5 @@
+#include <string.h>
+#include <Foundation/Foundation.h>
 #include "Chromosome.h"
 
 struct Chromosome* createChromosome(int *features, int num_features)
@@ -7,6 +9,8 @@ struct Chromosome* createChromosome(int *features, int num_features)
 
   chromosome = (Chromosome *)my_malloc(sizeof(Chromosome));
   chromosome->features    = (Gene **)my_malloc(num_features * sizeof(Gene *));
+  chromosome->carcinogens = (bool *) my_malloc(num_features * sizeof(bool));
+  memset(chromosome->carcinogens, false, num_features);
   chromosome->numFeatures = num_features;
   chromosome->fitness     = 0;
   for(i = 0; i < num_features && features != NULL; i++) {
@@ -74,15 +78,27 @@ void mutate(struct Chromosome *chromosome)
   chromosome->features[position] = createGene(gene);
 }
 
+bool activeCarcinogen(struct Chromosome *chromosome, int position)
+{
+  bool wasActive = chromosome->carcinogens[position];
+
+  if(wasActive == false) {
+    chromosome->carcinogens[position] = true;
+  }
+
+  return wasActive;
+}
+
 /**
 * f(x) = A(x)*w1 + w2*(M - R(x))/M --> A(x) ->suma de elementos cancerígenos, M--> total genes, R(X)--> genes seleccionados
 */
-float calculateFitness(struct Chromosome *chromosome) {
+float calculateFitness(struct Chromosome *chromosome)
+{
   int i, A, R, M;
 
   A = 0;
   for (i = 0; i < chromosome->numFeatures; ++i) {
-    if(isCarcinogen(chromosome->features[i]) == true) {
+    if(isCarcinogen(chromosome->features[i]) == true && activeCarcinogen(chromosome, i) == false) {
       A++;
     }
   }
@@ -93,7 +109,8 @@ float calculateFitness(struct Chromosome *chromosome) {
   return chromosome->fitness;
 }
 
-float getFitness(struct Chromosome *chromosome) {
+float getFitness(struct Chromosome *chromosome)
+{
   return chromosome->fitness;
 }
 
@@ -104,6 +121,7 @@ void freeChromosome(struct Chromosome *chromosome)
   for(i = 0; i < chromosome->numFeatures; i++) {
     freeGene(chromosome->features[i]);
   }
+  free(chromosome->carcinogens);
   free(chromosome->features);
   free(chromosome);
 }

@@ -14,11 +14,12 @@
 
 int main(void) {
   int array[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
-  struct Gene gene;
-  struct Chromosome *chromosome = createChromosome(array);
+  struct Gene *gene;
+  struct Chromosome *chromosome = createChromosome(array, 10);
   srand(time(NULL));
-  initializeGene(&gene, 5);
+  gene = createGene(5);
   printf("Hello world!\n");
   freeChromosome(chromosome);
+  freeGene(gene);
   return EXIT_SUCCESS;
 }

@@ -10,6 +10,8 @@
 int POPULATION_SIZE;
 int MUTATION_PROB;
 int MAX_GENERATIONS;
+int ELITISM;
+int CROSSOVERS_PER_GEN;
 
 typedef struct GAHandler {
   struct Chromosome **population;
@@ -20,3 +22,5 @@ void                initAlgorithm(struct GAHandler *gaHandler);
 struct Chromosome** getPopulation(struct GAHandler *gaHandler);
 struct Chromosome*  getBestChromosome(struct GAHandler *gaHandler);
 void                freeGAHandler(struct GAHandler *gaHandler);
+
+#endif
