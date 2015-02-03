@@ -6,7 +6,7 @@ extern int   NUM_FEATURES       = 10;
 extern float WEIGHT_1           = 0.65;
 extern float WEIGHT_2           = 0.35;
 extern int   NUM_CARCINOGEN     = 20;
-extern int   CARCINOGEN_GENES[] = {3, 4, 7, 9, 12, 15, 19, 22, 28, 36, 41, 49, 53, 57, 64, 65, 70, 73, 81, 97};
+extern int   *CARCINOGEN_GENES = {3, 4, 7, 9, 12, 15, 19, 22, 28, 36, 41, 49, 53, 57, 64, 65, 70, 73, 81, 97};
 
 POPULATION_SIZE    = 10;
 MUTATION_PROB      = 15;
@@ -20,7 +20,7 @@ struct GAHandler* createGAHandler(char *config_file)
 
 }
 
-void initAlgorithm(struct GAHandler *gaHandler)
+void applyGA(struct GAHandler *gaHandler)
 {
   int i;
 
@@ -28,7 +28,6 @@ void initAlgorithm(struct GAHandler *gaHandler)
     for (i = 0; i < POPULATION_SIZE; ++i)
     {
       calculateFitness(gaHandler->population[i]);
-      
     }
   } while(true);
 }

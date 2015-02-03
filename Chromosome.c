@@ -1,5 +1,4 @@
 #include <string.h>
-#include <Foundation/Foundation.h>
 #include "Chromosome.h"
 
 struct Chromosome* createChromosome(int *features, int num_features)
@@ -11,8 +10,10 @@ struct Chromosome* createChromosome(int *features, int num_features)
   chromosome->features    = (Gene **)my_malloc(num_features * sizeof(Gene *));
   chromosome->carcinogens = (bool *) my_malloc(num_features * sizeof(bool));
   memset(chromosome->carcinogens, false, num_features);
-  chromosome->numFeatures = num_features;
-  chromosome->fitness     = 0;
+
+  chromosome->numFeatures        = num_features;
+  chromosome->fitness            = 0;
+  chromosome->normalized_fitness = 0;
   for(i = 0; i < num_features && features != NULL; i++) {
     chromosome->features[i] = createGene(features[i]);
   }
@@ -20,12 +21,37 @@ struct Chromosome* createChromosome(int *features, int num_features)
   return chromosome;
 }
 
+struct Chromosome* cloneChromosome(struct Chromosome *chromosome)
+{
+  int *features;
+  struct Chromosome *cloneChromosome;
+
+  features        = getFeaturesInt(chromosome);
+  cloneChromosome = createChromosome(features, chromosome->numFeatures);
+  free(features);
+
+  return cloneChromosome;
+}
+
+int* featuresToInt(struct Chromosome* chromosome)
+{
+  int i, *features;
+
+  features = (int *)my_malloc(chromosome->numFeatures * sizeof(int));
+  for(i = 0; i < chromosome->numFeatures; i++) {
+	features[i] = chromosome->features[i]->feature;
+  }
+
+  return features;
+}
+
 /**
 * Two-point crossovers
 */
-void crossover(struct Chromosome *parent_1, struct Chromosome *parent_2, struct Chromosome **children)
+struct Chromosome** crossover(struct Chromosome *parent_1, struct Chromosome *parent_2)
 {
   int i, num_children, num_features, point_1, point_2, aux;
+  struct Chromosome **children;
   num_features = parent_1->numFeatures;
   num_children = 2;
 
@@ -65,6 +91,8 @@ void crossover(struct Chromosome *parent_1, struct Chromosome *parent_2, struct 
   memcpy(children[0]->features + point_2, parent_1->features + point_2, (num_features - point_2) * sizeof(struct Gene));
   memcpy(children[1]->features + point_2, parent_2->features + point_2, (num_features - point_2) * sizeof(struct Gene));
   */
+
+  return children;
 }
 
 void mutate(struct Chromosome *chromosome)
@@ -107,6 +135,13 @@ float calculateFitness(struct Chromosome *chromosome)
   chromosome->fitness = (A * WEIGHT_1) + (WEIGHT_2 * (M - R))/M;
 
   return chromosome->fitness;
+}
+
+float setNormalizedFitness(struct Chromosome *chromosome, float totalFitness, float aggregatedFitness)
+{
+  chromosome->normalized_fitness = (chromosome->fitness / totalFitness) + aggregatedFitness;
+
+  return chromosome->normalized_fitness;
 }
 
 float getFitness(struct Chromosome *chromosome)
