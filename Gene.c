@@ -1,8 +1,8 @@
 #include "Gene.h"
 
-struct Gene* createGene(int feature)
+Gene* createGene(int feature)
 {
-	struct Gene *gene = my_malloc(sizeof(struct Gene));
+	Gene *gene = my_malloc(sizeof(Gene));
 
 	gene->feature = feature;
 	setCarcinogen(gene);
@@ -10,17 +10,17 @@ struct Gene* createGene(int feature)
 	return gene;
 }
 
-int getFeature(struct Gene *gene)
+int getFeature(Gene *gene)
 {
 	return gene->feature;
 }
 
-bool isCarcinogen(struct Gene *gene)
+bool isCarcinogen(Gene *gene)
 {
   return gene->carcinogen;
 }
 
-void setCarcinogen(struct Gene *gene)
+void setCarcinogen(Gene *gene)
 {
   int i;
 
@@ -33,7 +33,7 @@ void setCarcinogen(struct Gene *gene)
   }
 }
 
-void freeGene(struct Gene *gene)
+void freeGene(Gene *gene)
 {
 	free(gene);
 }

@@ -10,7 +10,7 @@
 ChromosomeList* createChromosomeList(int size)
 {
   ChromosomeList *chromosomeList = (ChromosomeList *)my_malloc(sizeof(ChromosomeList));
-  chromosomeList->chromosomeList = (Chromosome **)my_malloc(size * sizeof(Chromosome*));
+  chromosomeList->list           = (Chromosome **)my_malloc(size * sizeof(Chromosome*));
   chromosomeList->minFitness     = 0;
   chromosomeList->occupied       = 0;
   chromosomeList->size           = size;
@@ -18,27 +18,31 @@ ChromosomeList* createChromosomeList(int size)
   return chromosomeList;
 }
 
-void addChromosomeToList(ChromosomeList *chromosomeList, struct Chromosome *chromosome)
+void addChromosomeToList(ChromosomeList *chromosomeList, Chromosome *chromosome)
 {
   int i, position;
-  struct Chromosome *aux_chromo;
 
-  for(i = 0; i < chromosomeList->occupied && getFitness(chromosomeList->list[i]) < getFitness(chromosome->fitness); ++i);
+  for(i = 0; i < chromosomeList->occupied && getFitness(chromosomeList->list[i]) < getFitness(chromosome); ++i);
   position = i;
 
   if(chromosomeList->occupied < chromosomeList->size) {
-	for(i = ++chromosomeList->occupied; i > position;) {
-	  chromosomeList->list[i] = chromosomeList->list[--i];
+	for(i = ++chromosomeList->occupied; i > position; --i) {
+	  chromosomeList->list[i] = chromosomeList->list[i - 1];
 	}
   }
   else {
-	for(i = 0; i < position;) {
-	  chromosomeList->list[i] = chromosomeList->list[++i];
+	for(i = 0; i < position; ++i) {
+	  chromosomeList->list[i] = chromosomeList->list[i + 1];
 	}
   }
 
   chromosomeList->list[position] = chromosome;
   chromosomeList->minFitness               = getFitness(chromosomeList->list[0]);
+}
+
+Chromosome* chromosomeAt(ChromosomeList *chromosomeList, int index)
+{
+	return chromosomeList->list[index];
 }
 
 float getMinFitness(ChromosomeList *chromosomeList)

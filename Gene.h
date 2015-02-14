@@ -12,10 +12,10 @@ typedef struct Gene {
   bool   carcinogen;
 } Gene;
 
-struct Gene* createGene(int feature);
-int          getFeature(struct Gene *gene);
-bool         isCarcinogen(struct Gene *gene);
-void         setCarcinogen(struct Gene *gene);
-void         freeGene(struct Gene *gene);
+Gene* createGene(int feature);
+int   getFeature(Gene *gene);
+bool  isCarcinogen(Gene *gene);
+void  setCarcinogen(Gene *gene);
+void  freeGene(Gene *gene);
 
 #endif

@@ -12,7 +12,8 @@ typedef struct ChromosomeList {
 } ChromosomeList;
 
 ChromosomeList* createChromosomeList(int size);
-void            addChromosomeToList(struct Chromosome *chromosome);
+void            addChromosomeToList(ChromosomeList *chromosomeList, Chromosome *chromosome);
+Chromosome*     chromosomeAt(ChromosomeList *chromosomeList, int index);
 float           getMinFitness(ChromosomeList *chromosomeList);
 int             getListSize(ChromosomeList *chromosomeList);
 int             getListOccupied(ChromosomeList *chromosomeList);

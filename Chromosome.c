@@ -1,10 +1,10 @@
 #include <string.h>
 #include "Chromosome.h"
 
-struct Chromosome* createChromosome(int *features, int num_features)
+Chromosome* createChromosome(int *features, int num_features)
 {
   int i;
-  struct Chromosome *chromosome;
+  Chromosome *chromosome;
 
   chromosome = (Chromosome *)my_malloc(sizeof(Chromosome));
   chromosome->features    = (Gene **)my_malloc(num_features * sizeof(Gene *));
@@ -21,19 +21,19 @@ struct Chromosome* createChromosome(int *features, int num_features)
   return chromosome;
 }
 
-struct Chromosome* cloneChromosome(struct Chromosome *chromosome)
+Chromosome* cloneChromosome(Chromosome *chromosome)
 {
   int *features;
-  struct Chromosome *cloneChromosome;
+  Chromosome *cloneChromosome;
 
-  features        = getFeaturesInt(chromosome);
+  features        = featuresToInt(chromosome);
   cloneChromosome = createChromosome(features, chromosome->numFeatures);
   free(features);
 
   return cloneChromosome;
 }
 
-int* featuresToInt(struct Chromosome* chromosome)
+int* featuresToInt(Chromosome* chromosome)
 {
   int i, *features;
 
@@ -48,10 +48,10 @@ int* featuresToInt(struct Chromosome* chromosome)
 /**
 * Two-point crossovers
 */
-struct Chromosome** crossover(struct Chromosome *parent_1, struct Chromosome *parent_2)
+Chromosome** crossover(Chromosome *parent_1, Chromosome *parent_2)
 {
   int i, num_children, num_features, point_1, point_2, aux;
-  struct Chromosome **children;
+  Chromosome **children;
   num_features = parent_1->numFeatures;
   num_children = 2;
 
@@ -95,7 +95,7 @@ struct Chromosome** crossover(struct Chromosome *parent_1, struct Chromosome *pa
   return children;
 }
 
-void mutate(struct Chromosome *chromosome)
+void mutate(Chromosome *chromosome)
 {
   int gene, position;
 
@@ -106,7 +106,7 @@ void mutate(struct Chromosome *chromosome)
   chromosome->features[position] = createGene(gene);
 }
 
-bool activeCarcinogen(struct Chromosome *chromosome, int position)
+bool activeCarcinogen(Chromosome *chromosome, int position)
 {
   bool wasActive = chromosome->carcinogens[position];
 
@@ -120,7 +120,7 @@ bool activeCarcinogen(struct Chromosome *chromosome, int position)
 /**
 * f(x) = A(x)*w1 + w2*(M - R(x))/M --> A(x) ->suma de elementos cancerígenos, M--> total genes, R(X)--> genes seleccionados
 */
-float calculateFitness(struct Chromosome *chromosome)
+float calculateFitness(Chromosome *chromosome)
 {
   int i, A, R, M;
 
@@ -137,19 +137,37 @@ float calculateFitness(struct Chromosome *chromosome)
   return chromosome->fitness;
 }
 
-float setNormalizedFitness(struct Chromosome *chromosome, float totalFitness, float aggregatedFitness)
+float setNormalizedFitness(Chromosome *chromosome, float totalFitness, float aggregatedFitness)
 {
   chromosome->normalized_fitness = (chromosome->fitness / totalFitness) + aggregatedFitness;
 
   return chromosome->normalized_fitness;
 }
 
-float getFitness(struct Chromosome *chromosome)
+float getFitness(Chromosome *chromosome)
 {
   return chromosome->fitness;
 }
 
-void freeChromosome(struct Chromosome *chromosome)
+float getNormalizedFitness(Chromosome *chromosome)
+{
+  return chromosome->normalized_fitness;
+}
+
+void printChromosome(Chromosome *chromosome)
+{
+  int i, numFeatures = chromosome->numFeatures - 1;
+  printf("[");
+  for(i = 0; i < numFeatures; ++i) {
+	printf("%d, ", getFeature(chromosome->features[i]));
+  }
+  if(chromosome->numFeatures > 0) {
+	printf("%d", getFeature(chromosome->features[numFeatures]));
+  }
+  printf("]");
+}
+
+void freeChromosome(Chromosome *chromosome)
 {
   int i;
 
