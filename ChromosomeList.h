@@ -17,6 +17,7 @@ Chromosome*     chromosomeAt(ChromosomeList *chromosomeList, int index);
 float           getMinFitness(ChromosomeList *chromosomeList);
 int             getListSize(ChromosomeList *chromosomeList);
 int             getListOccupied(ChromosomeList *chromosomeList);
+void            printChromosomeList(ChromosomeList *chromosomeList);
 void            freeChromosomeList(ChromosomeList *chromosomeList);
 
 #endif

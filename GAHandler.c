@@ -27,17 +27,17 @@ GAHandler* createGAHandler(char *config_file)
   //Copying the carcinogen genes to the extern variable
   CARCINOGEN_GENES = (int *)my_malloc(NUM_CARCINOGEN * sizeof(int));
   for(i = 0; i < NUM_CARCINOGEN; ++i) {
-	CARCINOGEN_GENES[i] = AUX_CARCINOGEN_GENES[i];
+    CARCINOGEN_GENES[i] = AUX_CARCINOGEN_GENES[i];
   }
 
   // Generating initial population with all the genes
   numGenes = MAX_GENES / gaHandler->populationSize;
   genes    = (int *)my_malloc(numGenes * sizeof(int));
   for (i = 0; i < gaHandler->populationSize; ++i) {
-	for(j = 0; j < numGenes; ++j) {
-	  genes[j] = (i * 10) + j;
-	}
-	gaHandler->population[i] = createChromosome(genes, numGenes);
+    for(j = 0; j < numGenes; ++j) {
+      genes[j] = (i * 10) + j;
+    }
+    gaHandler->population[i] = createChromosome(genes, numGenes);
     calculateFitness(gaHandler->population[i]);
   }
   free(genes);
@@ -73,10 +73,10 @@ int getWeakestChromosomeIndex(GAHandler *gaHandler)
   float fitness     = getFitness(gaHandler->population[position]);
 
   for(i = 1; i < gaHandler->populationSize; i++) {
-	if(getFitness(gaHandler->population[i]) < fitness) {
-	  position = i;
-	  fitness  = getFitness(gaHandler->population[i]);
-	}
+    if(getFitness(gaHandler->population[i]) < fitness) {
+      position = i;
+      fitness  = getFitness(gaHandler->population[i]);
+    }
   }
 
   return position;
@@ -88,11 +88,13 @@ ChromosomeList* elitism(GAHandler *gaHandler)
   Chromosome*     chromosome;
   ChromosomeList* elite = createChromosomeList(elite_size);
 
-  for(i = 0; i < gaHandler->populationSize; ++i) {
-	if(getMinFitness(elite) < getFitness(gaHandler->population[i]) || getListOccupied(elite) < getListSize(elite)) {
-	  chromosome = cloneChromosome(gaHandler->population[i]);
-	  addChromosomeToList(elite, chromosome);
-	}
+  if(elite->size > 0) {
+    for(i = 0; i < gaHandler->populationSize; ++i) {
+      if(getMinFitness(elite) < getFitness(gaHandler->population[i]) || getListOccupied(elite) < getListSize(elite)) {
+        chromosome = cloneChromosome(gaHandler->population[i]);
+        addChromosomeToList(elite, chromosome);
+      }
+    }
   }
 
   return elite;
@@ -119,9 +121,11 @@ int* selection(GAHandler *gaHandler, int numParents)
 
   //Roulette wheel selection
   for(i = 0; i < numParents; ++i) {
-	normalizedFitness = (rand() % 1000 ) / 1000; // We generate a random number between 0.000 and 0.999
-	for(j = 0; getNormalizedFitness(gaHandler->population[j]) < normalizedFitness; ++j);
-	parents[i] = j;
+    do {
+      normalizedFitness = (rand() % 1000 ) / 1000.0; // We generate a random number between 0.000 and 0.999
+      for(j = 0; getNormalizedFitness(gaHandler->population[j]) < normalizedFitness; ++j);
+      parents[i] = j;
+    } while(i != 0 && parents[0] == j);
   }
 
   return parents;
@@ -136,7 +140,7 @@ Chromosome** crossoverPhase(GAHandler *gaHandler, Chromosome *parent_1, Chromoso
 
 void mutation(GAHandler *gaHandler, Chromosome *chromosome)
 {
-  int mutateRate = rand() / 100;
+  int mutateRate = rand() % 100;
 
   if(mutateRate < gaHandler->mutationProb) {
 	  mutate(chromosome);
@@ -147,15 +151,17 @@ void restoreElite(GAHandler *gaHandler, ChromosomeList *elite)
 {
   int   i, position, size = getListOccupied(elite);
   float fitness;
+  Chromosome *chromosome;
 
   for(i = 0; i < size; ++i) {
-	position = getWeakestChromosomeIndex(gaHandler);
-	fitness  = getFitness(gaHandler->population[position]);
-	for(; i < size && (getFitness(chromosomeAt(elite, i)) <= fitness); ++i);
-	if(i < size) {
-	  freeChromosome(gaHandler->population[position]);
-	  gaHandler->population[position] = chromosomeAt(elite, i);
-	}
+    position = getWeakestChromosomeIndex(gaHandler);
+    fitness  = getFitness(gaHandler->population[position]);
+    for(; i < size && (getFitness(chromosomeAt(elite, i)) <= fitness); ++i);
+    if(i < size) {
+      freeChromosome(gaHandler->population[position]);
+      chromosome = cloneChromosome(chromosomeAt(elite, i));
+      gaHandler->population[position] = chromosome;
+    }
   }
 }
 
@@ -167,21 +173,24 @@ void applyGA(GAHandler *gaHandler)
   Chromosome     **children;
   ChromosomeList  *elite;
 
+  printPopulation(gaHandler);
   for(k = 0; k < gaHandler->maxGenerations; ++k) {
+    printf("\nGeneration: %d\n", k);
     elite = elitism(gaHandler);
     for(i = 0; i < gaHandler->crossoversPerGen; ++i) {
       parents  = selection(gaHandler, numParents);
       children = crossoverPhase(gaHandler,gaHandler->population[parents[0]], gaHandler->population[parents[1]]);
       for(j = 0; j < numChildren; ++j) {
-    	mutation(gaHandler, children[j]);
-    	calculateFitness(children[j]);
-    	freeChromosome(gaHandler->population[parents[j]]);
-    	gaHandler->population[parents[j]] = children[j]; // Children always replace their parents
+        mutation(gaHandler, children[j]);
+        calculateFitness(children[j]);
+        freeChromosome(gaHandler->population[parents[j]]);
+        gaHandler->population[parents[j]] = children[j]; // Children always replace their parents
       }
       free(parents);
     }
     restoreElite(gaHandler, elite);
     freeChromosomeList(elite);
+    printPopulation(gaHandler);
   }
 }
 
@@ -189,10 +198,12 @@ void printPopulation(GAHandler *gaHangler)
 {
   int i;
 
-  printf("#### Population ###");
+  printf("\n#### Population ###\n");
+  printf("Population size: %d\n", gaHangler->populationSize);
   for(i = 0; i < gaHangler->populationSize; ++i) {
-	printf("\n");
-	printChromosome(gaHangler->population[i]);
+    printf("Chromosome %d: ", i);
+    printChromosome(gaHangler->population[i]);
+    printf("\n");
   }
 }
 

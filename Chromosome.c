@@ -8,8 +8,6 @@ Chromosome* createChromosome(int *features, int num_features)
 
   chromosome = (Chromosome *)my_malloc(sizeof(Chromosome));
   chromosome->features    = (Gene **)my_malloc(num_features * sizeof(Gene *));
-  chromosome->carcinogens = (bool *) my_malloc(num_features * sizeof(bool));
-  memset(chromosome->carcinogens, false, num_features);
 
   chromosome->numFeatures        = num_features;
   chromosome->fitness            = 0;
@@ -28,9 +26,26 @@ Chromosome* cloneChromosome(Chromosome *chromosome)
 
   features        = featuresToInt(chromosome);
   cloneChromosome = createChromosome(features, chromosome->numFeatures);
+
+  cloneChromosome->fitness = chromosome->fitness;
+
   free(features);
 
   return cloneChromosome;
+}
+
+bool alreadyInChromosome(Chromosome* chromosome, Gene* gene, int position)
+{
+  int i;
+  bool exists = false;
+
+  for(i = 0; i < position && exists == false; ++i) {
+    if(getFeature(gene) == getFeature(chromosome->features[i])) {
+      exists = true;
+    }
+  }
+
+  return exists;
 }
 
 int* featuresToInt(Chromosome* chromosome)
@@ -39,7 +54,7 @@ int* featuresToInt(Chromosome* chromosome)
 
   features = (int *)my_malloc(chromosome->numFeatures * sizeof(int));
   for(i = 0; i < chromosome->numFeatures; i++) {
-	features[i] = chromosome->features[i]->feature;
+    features[i] = getFeature(chromosome->features[i]);
   }
 
   return features;
@@ -99,22 +114,11 @@ void mutate(Chromosome *chromosome)
 {
   int gene, position;
 
-  gene     = rand() % MAX_GEN;
+  gene     = rand() % MAX_GENES;
   position = rand() % chromosome->numFeatures;
 
   freeGene(chromosome->features[position]);
   chromosome->features[position] = createGene(gene);
-}
-
-bool activeCarcinogen(Chromosome *chromosome, int position)
-{
-  bool wasActive = chromosome->carcinogens[position];
-
-  if(wasActive == false) {
-    chromosome->carcinogens[position] = true;
-  }
-
-  return wasActive;
 }
 
 /**
@@ -123,15 +127,19 @@ bool activeCarcinogen(Chromosome *chromosome, int position)
 float calculateFitness(Chromosome *chromosome)
 {
   int i, A, R, M;
+  float aux;
 
   A = 0;
+
   for (i = 0; i < chromosome->numFeatures; ++i) {
-    if(isCarcinogen(chromosome->features[i]) == true && activeCarcinogen(chromosome, i) == false) {
-      A++;
+    if(isCarcinogen(chromosome->features[i]) == true && alreadyInChromosome(chromosome, chromosome->features[i], i) == false) {
+      A++;;
     }
   }
-  M = MAX_GEN;
+
+  M = MAX_GENES;
   R = chromosome->numFeatures - A; //Number of selected features - Carcinogen genes selected
+
   chromosome->fitness = (A * WEIGHT_1) + (WEIGHT_2 * (M - R))/M;
 
   return chromosome->fitness;
@@ -159,12 +167,12 @@ void printChromosome(Chromosome *chromosome)
   int i, numFeatures = chromosome->numFeatures - 1;
   printf("[");
   for(i = 0; i < numFeatures; ++i) {
-	printf("%d, ", getFeature(chromosome->features[i]));
+    printf("%d, ", getFeature(chromosome->features[i]));
   }
   if(chromosome->numFeatures > 0) {
-	printf("%d", getFeature(chromosome->features[numFeatures]));
+    printf("%d", getFeature(chromosome->features[numFeatures]));
   }
-  printf("]");
+  printf("] -> %f", chromosome->fitness);
 }
 
 void freeChromosome(Chromosome *chromosome)
@@ -174,7 +182,6 @@ void freeChromosome(Chromosome *chromosome)
   for(i = 0; i < chromosome->numFeatures; i++) {
     freeGene(chromosome->features[i]);
   }
-  free(chromosome->carcinogens);
   free(chromosome->features);
   free(chromosome);
 }
