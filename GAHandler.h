@@ -3,6 +3,7 @@
 #define GAHANDLER_H
 
 #include "ChromosomeList.h"
+#include "libconfig/libconfig.h"
 
 #define BEST_POSIBLE_FITNESS NUM_FEATURES    
 #define CONFIG_FILE "gaselcancer.cfg"
