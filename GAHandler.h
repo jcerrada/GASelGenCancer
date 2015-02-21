@@ -3,10 +3,10 @@
 #define GAHANDLER_H
 
 #include "ChromosomeList.h"
-#include "libconfig/libconfig.h"
+#include "ConfigReader.h"
 
-#define BEST_POSIBLE_FITNESS NUM_FEATURES    
-#define CONFIG_FILE "gaselcancer.cfg"
+int   BEST_POSIBLE_FITNESS = NUM_FEATURES;
+char* CONFIG_FILE          = "gaselcancer.cfg";
 
 typedef struct GAHandler {
   struct Chromosome **population;
@@ -18,7 +18,7 @@ typedef struct GAHandler {
 
 } GAHandler;
 
-GAHandler*      createGAHandler(char *config_file);
+GAHandler*      createGAHandler();
 Chromosome**    getPopulation(GAHandler *gaHandler);
 Chromosome*     getBestChromosome(GAHandler *gaHandler);
 int             getWeakestChromosomeIndex(GAHandler *gaHandler);

@@ -4,6 +4,7 @@
 
 #include "Commons.h"
 
+int MAX_GENES;
 int NUM_CARCINOGEN;
 int *CARCINOGEN_GENES;
 

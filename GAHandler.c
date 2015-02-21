@@ -9,7 +9,7 @@ extern int   NUM_CARCINOGEN    = 20;
 extern int   *CARCINOGEN_GENES;
 int   AUX_CARCINOGEN_GENES[]   = {3, 4, 7, 9, 12, 15, 19, 22, 28, 36, 41, 49, 53, 57, 64, 65, 70, 73, 81, 97};
 
-GAHandler* createGAHandler(char *config_file)
+GAHandler* createGAHandler()
 {
   int i, j, *genes, numGenes;
   GAHandler *gaHandler = (GAHandler *)my_malloc(sizeof(GAHandler));

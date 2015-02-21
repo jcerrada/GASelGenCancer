@@ -4,7 +4,6 @@
 
 #include "Gene.h"
 
-int   MAX_GENES;
 float WEIGHT_1;
 float WEIGHT_2;
 

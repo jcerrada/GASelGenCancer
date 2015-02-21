@@ -1,6 +1,8 @@
 #include <string.h>
 #include "Chromosome.h"
 
+extern int MAX_GENES;
+
 Chromosome* createChromosome(int *features, int num_features)
 {
   int i;
