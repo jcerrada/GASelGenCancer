@@ -23,9 +23,11 @@ int main(void) {
   */
 
   GAHandler *gaHandler = createGAHandler("");
-  applyGA(gaHandler);
 
-  freeGAHandler(gaHandler);
+  if(gaHandler != NULL) {
+    applyGA(gaHandler);
+    freeGAHandler(gaHandler);
+  }
 
   return EXIT_SUCCESS;
 }

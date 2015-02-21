@@ -129,7 +129,6 @@ void mutate(Chromosome *chromosome)
 float calculateFitness(Chromosome *chromosome)
 {
   int i, A, R, M;
-  float aux;
 
   A = 0;
 

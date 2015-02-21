@@ -1,46 +1,59 @@
 
 #include "GAHandler.h"
 
-extern int   MAX_GENES         = 100;
-extern int   NUM_FEATURES      = 10;
-extern float WEIGHT_1          = 0.65;
-extern float WEIGHT_2          = 0.35;
-extern int   NUM_CARCINOGEN    = 20;
+extern int   MAX_GENES;
+extern int   NUM_FEATURES;
+extern float WEIGHT_1;
+extern float WEIGHT_2;
+extern int   NUM_CARCINOGEN;
 extern int   *CARCINOGEN_GENES;
-int   AUX_CARCINOGEN_GENES[]   = {3, 4, 7, 9, 12, 15, 19, 22, 28, 36, 41, 49, 53, 57, 64, 65, 70, 73, 81, 97};
 
 GAHandler* createGAHandler()
 {
-  int i, j, *genes, numGenes;
+  int i, *carGenes, numGenes, **population;
+  ConfigReader *config = createConfigReader();
   GAHandler *gaHandler = (GAHandler *)my_malloc(sizeof(GAHandler));
+
+  //Reading Config file
+  if(readConfigFile(config, CONFIG_FILE) == CONFIG_ERROR) {
+    fprintf(stderr, "Error trying to read the configuration file: %s\n", CONFIG_FILE);
+    freeConfigReader(config);
+    free(gaHandler);
+    return NULL;
+  }
 
   // Initializing seed
   srand(time(NULL));
 
-  gaHandler->populationSize   = 10;
-  gaHandler->mutationProb     = 15;
-  gaHandler->maxGenerations   = 100;
-  gaHandler->elitism          = 15;
-  gaHandler->crossoversPerGen = 10;
-  gaHandler->population       = (Chromosome **)my_malloc(gaHandler->populationSize * sizeof(Chromosome *));
-
-  //Copying the carcinogen genes to the extern variable
+  MAX_GENES      = getCRMaxGeneNumber(config);
+  NUM_FEATURES   = getCRFeaturesPerChromosome(config);
+  WEIGHT_1       = getCRWeight1(config);
+  WEIGHT_2       = getCRWeight2(config);
+  NUM_CARCINOGEN = getCRNumCarcinogenGenes(config);
+  carGenes       = getCRCarcinogenGenes(config);
   CARCINOGEN_GENES = (int *)my_malloc(NUM_CARCINOGEN * sizeof(int));
   for(i = 0; i < NUM_CARCINOGEN; ++i) {
-    CARCINOGEN_GENES[i] = AUX_CARCINOGEN_GENES[i];
+    CARCINOGEN_GENES[i] = carGenes[i];
   }
 
+  BEST_POSIBLE_FITNESS = (WEIGHT_1 * NUM_FEATURES) + WEIGHT_2;
+
+  gaHandler->populationSize   = getCRPopulationSize(config);
+  gaHandler->mutationProb     = getCRMutationProbability(config);
+  gaHandler->maxGenerations   = getCRMaxGenerations(config);
+  gaHandler->elitism          = getCRElitism(config);
+  gaHandler->crossoversPerGen = getCRCrossoversPerGeneration(config);
+  gaHandler->population       = (Chromosome **)my_malloc(gaHandler->populationSize * sizeof(Chromosome *));
+
   // Generating initial population with all the genes
-  numGenes = MAX_GENES / gaHandler->populationSize;
-  genes    = (int *)my_malloc(numGenes * sizeof(int));
+  numGenes   = MAX_GENES / gaHandler->populationSize;
+  population = getCRPopulation(config);
   for (i = 0; i < gaHandler->populationSize; ++i) {
-    for(j = 0; j < numGenes; ++j) {
-      genes[j] = (i * 10) + j;
-    }
-    gaHandler->population[i] = createChromosome(genes, numGenes);
+    gaHandler->population[i] = createChromosome(population[i], numGenes);
     calculateFitness(gaHandler->population[i]);
   }
-  free(genes);
+
+  freeConfigReader(config);
 
   return gaHandler;
 }
@@ -214,7 +227,7 @@ void freeGAHandler(GAHandler *gaHandler)
   for (i = 0; i < gaHandler->populationSize; ++i) {
     freeChromosome(gaHandler->population[i]);
   }
-
   free(CARCINOGEN_GENES);
+
   free(gaHandler);
 }

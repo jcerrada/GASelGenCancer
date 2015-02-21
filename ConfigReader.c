@@ -4,7 +4,7 @@
 
 ConfigReader* createConfigReader()
 {
-  int i, j, gene;
+  int i, j;
   ConfigReader *configReader = (ConfigReader *)my_malloc(sizeof(ConfigReader));
 
   //Gene vars
@@ -30,7 +30,7 @@ ConfigReader* createConfigReader()
   for(i = 0; i < configReader->populationSize; ++i)
   {
     configReader->population[i] = (int *)my_malloc(configReader->numFeatures * sizeof(int));
-    for (int j = 0; j < configReader->numFeatures; ++j)
+    for (j = 0; j < configReader->numFeatures; ++j)
     {
       configReader->population[i][j] = (10 * i) + j;
     }
@@ -150,62 +150,62 @@ int readConfigFile(ConfigReader* configReader, char* configFile)
   return CONFIG_RIGHT;
 }
 
-int getMaxGeneNumber(ConfigReader* configReader)
+int getCRMaxGeneNumber(ConfigReader* configReader)
 {
   return configReader->maxGeneNumber;
 }
 
-int getNumCarcinogenGenes(ConfigReader* configReader)
+int getCRNumCarcinogenGenes(ConfigReader* configReader)
 {
   return configReader->numCarcinogen;
 }
 
-int* getCarcinogenGenes(ConfigReader* configReader)
+int* getCRCarcinogenGenes(ConfigReader* configReader)
 {
   return configReader->carcinogenGenes;
 }
 
-int getFeaturesPerChromosome(ConfigReader* configReader)
+int getCRFeaturesPerChromosome(ConfigReader* configReader)
 {
   return configReader->numFeatures;
 }
 
-float getWeight1(ConfigReader* configReader)
+float getCRWeight1(ConfigReader* configReader)
 {
-  return configReader->weight1;
+  return (float)configReader->weight1;
 }
 
-float getWeight2(ConfigReader* configReader)
+float getCRWeight2(ConfigReader* configReader)
 {
-  return configReader->weight2;
+  return (float)configReader->weight2;
 }
 
-int getPopulationSize(ConfigReader* configReader)
+int getCRPopulationSize(ConfigReader* configReader)
 {
   return configReader->populationSize;
 }
 
-int** getPopulation(ConfigReader* configReader)
+int** getCRPopulation(ConfigReader* configReader)
 {
   return configReader->population;
 }
 
-int getMutationProbability(ConfigReader* configReader)
+int getCRMutationProbability(ConfigReader* configReader)
 {
   return configReader->mutationProb;
 }
 
-int getMaxGenerations(ConfigReader* configReader)
+int getCRMaxGenerations(ConfigReader* configReader)
 {
   return configReader->maxGenerations;
 }
 
-int getElitism(ConfigReader* configReader)
+int getCRElitism(ConfigReader* configReader)
 {
   return configReader->elitism;
 }
 
-int getCrossoversPerGeneration(ConfigReader* configReader)
+int getCRCrossoversPerGeneration(ConfigReader* configReader)
 {
   return configReader->crossoversPerGen;
 }
@@ -215,7 +215,7 @@ void freeConfigReader(ConfigReader* configReader)
   int i;
 
   free(configReader->carcinogenGenes);
-  for (int i = 0; i < configReader->populationSize; ++i) {
+  for (i = 0; i < configReader->populationSize; ++i) {
     free(configReader->population[i]);
   }
   free(configReader->population);

@@ -4,6 +4,7 @@
 
 #include "Gene.h"
 
+int   NUM_FEATURES;
 float WEIGHT_1;
 float WEIGHT_2;
 

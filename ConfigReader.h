@@ -16,8 +16,8 @@ typedef struct ConfigReader {
 
   //Chromosome vars
   int   numFeatures;
-  float weight1;
-  float weight2;
+  double weight1;
+  double weight2;
 
   //GA vars
   int   populationSize;
@@ -34,18 +34,18 @@ int           readGeneVarsConfig(ConfigReader* configReader, config_t *cfg);
 int           readChromosomeVarsConfig(ConfigReader* configReader, config_t *cfg);
 int           readGAVarsConfig(ConfigReader* configReader, config_t *cfg);
 int           readConfigFile(ConfigReader* configReader, char* configFile);
-int           getMaxGeneNumber(ConfigReader* configReader);
-int           getNumCarcinogenGenes(ConfigReader* configReader);
-int*          getCarcinogenGenes(ConfigReader* configReader);
-int           getFeaturesPerChromosome(ConfigReader* configReader);
-float         getWeight1(ConfigReader* configReader);
-float         getWeight2(ConfigReader* configReader);
-int           getPopulationSize(ConfigReader* configReader);
-int**         getPopulation(ConfigReader* configReader);
-int           getMutationProbability(ConfigReader* configReader);
-int           getMaxGenerations(ConfigReader* configReader);
-int           getElitism(ConfigReader* configReader);
-int           getCrossoversPerGeneration(ConfigReader* configReader);
+int           getCRMaxGeneNumber(ConfigReader* configReader);
+int           getCRNumCarcinogenGenes(ConfigReader* configReader);
+int*          getCRCarcinogenGenes(ConfigReader* configReader);
+int           getCRFeaturesPerChromosome(ConfigReader* configReader);
+float         getCRWeight1(ConfigReader* configReader);
+float         getCRWeight2(ConfigReader* configReader);
+int           getCRPopulationSize(ConfigReader* configReader);
+int**         getCRPopulation(ConfigReader* configReader);
+int           getCRMutationProbability(ConfigReader* configReader);
+int           getCRMaxGenerations(ConfigReader* configReader);
+int           getCRElitism(ConfigReader* configReader);
+int           getCRCrossoversPerGeneration(ConfigReader* configReader);
 void          freeConfigReader(ConfigReader* configReader);
 
 #endif

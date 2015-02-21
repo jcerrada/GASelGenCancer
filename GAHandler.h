@@ -5,8 +5,9 @@
 #include "ChromosomeList.h"
 #include "ConfigReader.h"
 
-int   BEST_POSIBLE_FITNESS = NUM_FEATURES;
-char* CONFIG_FILE          = "gaselcancer.cfg";
+#define CONFIG_FILE "gaselcancer.cfg"
+
+int   BEST_POSIBLE_FITNESS;
 
 typedef struct GAHandler {
   struct Chromosome **population;
