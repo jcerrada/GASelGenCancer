@@ -188,7 +188,8 @@ void applyGA(GAHandler *gaHandler)
 
   printPopulation(gaHandler);
   for(k = 0; k < gaHandler->maxGenerations; ++k) {
-    printf("\nGeneration: %d\n", k);
+    printf("\n==================================================\n");
+    printf("Generation: %d\n", k + 1);
     elite = elitism(gaHandler);
     for(i = 0; i < gaHandler->crossoversPerGen; ++i) {
       parents  = selection(gaHandler, numParents);
@@ -211,8 +212,7 @@ void printPopulation(GAHandler *gaHangler)
 {
   int i;
 
-  printf("\n#### Population ###\n");
-  printf("Population size: %d\n", gaHangler->populationSize);
+  printf("\n############# Population #############\n");
   for(i = 0; i < gaHangler->populationSize; ++i) {
     printf("Chromosome %d: ", i);
     printChromosome(gaHangler->population[i]);
