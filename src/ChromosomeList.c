@@ -32,6 +32,7 @@ void addChromosomeToList(ChromosomeList *chromosomeList, Chromosome *chromosome)
     chromosomeList->occupied++;
   }
   else {
+    freeChromosome(chromosomeList->list[0]);
     for(i = 0; i < position; ++i) {
       chromosomeList->list[i] = chromosomeList->list[i + 1];
     }
@@ -79,6 +80,7 @@ void freeChromosomeList(ChromosomeList *chromosomeList)
   for(i = 0; i < chromosomeList->occupied; ++i) {
     freeChromosome(chromosomeList->list[i]);
   }
+  free(chromosomeList->list);
 
   free(chromosomeList);
 }

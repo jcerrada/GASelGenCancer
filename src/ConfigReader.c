@@ -215,9 +215,11 @@ void freeConfigReader(ConfigReader* configReader)
   int i;
 
   free(configReader->carcinogenGenes);
+
   for (i = 0; i < configReader->populationSize; ++i) {
     free(configReader->population[i]);
   }
   free(configReader->population);
 
+  free(configReader);
 }

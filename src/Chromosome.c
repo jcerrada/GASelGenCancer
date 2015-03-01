@@ -184,5 +184,6 @@ void freeChromosome(Chromosome *chromosome)
     freeGene(chromosome->features[i]);
   }
   free(chromosome->features);
+
   free(chromosome);
 }

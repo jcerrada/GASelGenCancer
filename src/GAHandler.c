@@ -200,11 +200,13 @@ void applyGA(GAHandler *gaHandler)
         freeChromosome(gaHandler->population[parents[j]]);
         gaHandler->population[parents[j]] = children[j]; // Children always replace their parents
       }
+      free(children);
       free(parents);
     }
     restoreElite(gaHandler, elite);
-    freeChromosomeList(elite);
     printPopulation(gaHandler);
+
+    freeChromosomeList(elite);
   }
 }
 
@@ -227,6 +229,7 @@ void freeGAHandler(GAHandler *gaHandler)
   for (i = 0; i < gaHandler->populationSize; ++i) {
     freeChromosome(gaHandler->population[i]);
   }
+  free(gaHandler->population);
   free(CARCINOGEN_GENES);
 
   free(gaHandler);
