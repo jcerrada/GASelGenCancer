@@ -127,7 +127,6 @@ int readGAVarsConfig(ConfigReader* configReader, config_t *cfg)
 int readConfigFile(ConfigReader* configReader, char* configFile)
 {
   config_t cfg;
-  const char *str;
 
   config_init(&cfg);
 
